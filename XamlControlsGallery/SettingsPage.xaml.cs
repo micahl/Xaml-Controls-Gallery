@@ -1,4 +1,4 @@
-﻿//*********************************************************
+//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -7,8 +7,12 @@
 // PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
 //*********************************************************
+using AppUIBasics.Common;
+using AppUIBasics.Helper;
+using Microsoft.Graphics.Canvas.Effects;
 using System;
 using System.Linq;
+using Windows.ApplicationModel.Core;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -29,7 +33,7 @@ namespace AppUIBasics
             get
             {
                 var version = Windows.ApplicationModel.Package.Current.Id.Version;
-                return String.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
             }
         }
 
@@ -42,6 +46,8 @@ namespace AppUIBasics
                 soundToggle.IsOn = true;
             if (ElementSoundPlayer.SpatialAudioMode == ElementSpatialAudioMode.On)
                 spatialSoundBox.IsChecked = true;
+            if (NavigationRootPage.Current.NavigationView.PaneDisplayMode == Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Top)
+                navigationToggle.IsOn = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -51,14 +57,9 @@ namespace AppUIBasics
             NavigationRootPage.Current.NavigationView.Header = "Settings";
         }
 
-        private async void OnFeedbackButtonClick(object sender, RoutedEventArgs e)
-        {
-            await Launcher.LaunchUriAsync(new Uri("feedback-hub:"));
-        }
-
         private void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
         {
-            var currentTheme = App.RootTheme.ToString();
+            var currentTheme = ThemeHelper.RootTheme.ToString();
             (ThemePanel.Children.Cast<RadioButton>().FirstOrDefault(c => c?.Tag?.ToString() == currentTheme)).IsChecked = true;
         }
 
@@ -69,26 +70,7 @@ namespace AppUIBasics
 
             if (selectedTheme != null)
             {
-                App.RootTheme = App.GetEnum<ElementTheme>(selectedTheme);
-                if (selectedTheme == "Dark")
-                {
-                    titleBar.ButtonForegroundColor = Colors.White;
-                }
-                else if (selectedTheme == "Light")
-                {
-                    titleBar.ButtonForegroundColor = Colors.Black;
-                }
-                else
-                {
-                    if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
-                    {
-                        titleBar.ButtonForegroundColor = Colors.White;
-                    }
-                    else
-                    {
-                        titleBar.ButtonForegroundColor = Colors.Black;
-                    }
-                }
+                ThemeHelper.RootTheme = App.GetEnum<ElementTheme>(selectedTheme);
             }
         }
 
@@ -101,7 +83,7 @@ namespace AppUIBasics
         }
         private void spatialSoundBox_Checked(object sender, RoutedEventArgs e)
         {
-            if(soundToggle.IsOn == true)
+            if (soundToggle.IsOn == true)
             {
                 ElementSoundPlayer.SpatialAudioMode = ElementSpatialAudioMode.On;
             }
@@ -120,8 +102,13 @@ namespace AppUIBasics
                 spatialSoundBox.IsChecked = false;
 
                 ElementSoundPlayer.State = ElementSoundPlayerState.Off;
-                ElementSoundPlayer.SpatialAudioMode = ElementSpatialAudioMode.Off;                
+                ElementSoundPlayer.SpatialAudioMode = ElementSpatialAudioMode.Off;
             }
+        }
+
+        private void navigationToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            NavigationOrientationHelper.IsLeftMode = !navigationToggle.IsOn;
         }
 
         private void spatialSoundBox_Unchecked(object sender, RoutedEventArgs e)

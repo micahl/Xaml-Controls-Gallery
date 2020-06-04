@@ -17,13 +17,8 @@ using AppUIBasics.Data;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace AppUIBasics.ControlPages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class AutoSuggestBoxPage : Page
     {
         public AutoSuggestBoxPage()
@@ -135,11 +130,27 @@ namespace AppUIBasics.ControlPages
         {
             var suggestions = new List<ControlInfoDataItem>();
 
+            var querySplit = query.Split(" ");
             foreach (var group in ControlInfoDataSource.Instance.Groups)
             {
                 var matchingItems = group.Items.Where(
-                    item => item.Title.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0);
-
+                    item =>
+                    {
+                        // Idea: check for every word entered (separated by space) if it is in the name,  
+                        // e.g. for query "split button" the only result should "SplitButton" since its the only query to contain "split" and "button" 
+                        // If any of the sub tokens is not in the string, we ignore the item. So the search gets more precise with more words 
+                        bool flag = true;
+                        foreach (string queryToken in querySplit)
+                        {
+                            // Check if token is not in string 
+                            if (item.Title.IndexOf(queryToken, StringComparison.CurrentCultureIgnoreCase) < 0)
+                            {
+                                // Token is not in string, so we ignore this item. 
+                                flag = false;
+                            }
+                        }
+                        return flag;
+                    });
                 foreach (var item in matchingItems)
                 {
                     suggestions.Add(item);

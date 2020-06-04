@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Numerics;
 using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
@@ -34,14 +35,9 @@ namespace AppUIBasics.ControlPages
         {
             // If the implicit animation API is not present, simply no-op. 
             if (!(ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7))) return;
-
-            var customValue = Convert.ToDouble(OpacityTextBox.Text);
-
-            if (customValue >= 0.0 && customValue <= 1.0)
-            {
-                OpacityRectangle.Opacity = customValue;
-                OpacityValue.Value = customValue;
-            }
+            var customValue = OpacityNumberBox.Value;
+            OpacityRectangle.Opacity = customValue;
+            OpacityValue.Value = customValue;
         }
         private void RotationButton_Click(object sender, RoutedEventArgs e)
         {
@@ -50,17 +46,7 @@ namespace AppUIBasics.ControlPages
 
             RotationRectangle.CenterPoint = new System.Numerics.Vector3((float)RotationRectangle.ActualWidth / 2, (float)RotationRectangle.ActualHeight / 2, 0f);
 
-            float customValue = (float)Convert.ToDouble(RotationTextBox.Text);
-
-            if (customValue >= 0.0 && customValue <= 360.0)
-            {
-                RotationRectangle.Rotation = customValue;
-            }
-            else
-            {
-                RotationRectangle.Rotation = 0;
-            }
-            RotationValue.Value = RotationRectangle.Rotation;
+            RotationRectangle.Rotation = (float)RotationNumberBox.Value;
         }
         private void ScaleButton_Click(object sender, RoutedEventArgs e)
         {
@@ -74,20 +60,18 @@ namespace AppUIBasics.ControlPages
                                          ((ScaleZ.IsChecked == true) ? Vector3TransitionComponents.Z : 0);
 
             float customValue;
+
             if (sender != null && (sender as Button).Tag != null)
             {
                 customValue = (float)Convert.ToDouble((sender as Button).Tag);
             }
             else
             {
-                customValue = (float)Convert.ToDouble(ScaleTextBox.Text);
+                customValue = (float)ScaleNumberBox.Value;
             }
 
-            if (customValue > 0.0 && customValue <= 5)
-            {
-                ScaleRectangle.Scale = new Vector3(customValue);
-                ScaleValue.Value = customValue;
-            }
+            ScaleRectangle.Scale = new Vector3(customValue);
+            ScaleValue.Value = customValue;
         }
 
         private void TranslateButton_Click(object sender, RoutedEventArgs e)
@@ -108,33 +92,30 @@ namespace AppUIBasics.ControlPages
             }
             else
             {
-                customValue = (float)Convert.ToDouble(TranslationTextBox.Text);
+                customValue = (float)TranslationNumberBox.Value;
             }
 
-            if (customValue >= 0.0 && customValue <= 200.0)
-            {
-                TranslateRectangle.Translation = new Vector3(customValue);
-                TranslationValue.Value = customValue;
-            }
+            TranslateRectangle.Translation = new Vector3(customValue);
+            TranslationValue.Value = customValue;
         }
 
-        private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        private void NumberBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                if ((String)(sender as TextBox).Header == "Opacity")
+                if ((string)(sender as NumberBox).Header == "Opacity (0.0 to 1.0)")
                 {
                     OpacityButton_Click(null, null);
                 }
-                if ((String)(sender as TextBox).Header == "Rotation")
+                if ((string)(sender as NumberBox).Header == "Rotation (0.0 to 360.0)")
                 {
                     RotationButton_Click(null, null);
                 }
-                if ((String)(sender as TextBox).Header == "Scale")
+                if ((string)(sender as NumberBox).Header == "Scale (0.0 to 5.0)")
                 {
                     ScaleButton_Click(null, null);
                 }
-                if ((String)(sender as TextBox).Header == "Translation")
+                if ((string)(sender as NumberBox).Header == "Translation (0.0 to 200.0)")
                 {
                     TranslateButton_Click(null, null);
                 }

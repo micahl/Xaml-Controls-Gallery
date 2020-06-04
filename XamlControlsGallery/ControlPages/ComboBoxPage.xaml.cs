@@ -1,4 +1,4 @@
-﻿//*********************************************************
+//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -14,13 +14,8 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace AppUIBasics.ControlPages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class ComboBoxPage : Page
     {
         public List<Tuple<string, FontFamily>> Fonts { get; } = new List<Tuple<string, FontFamily>>()
@@ -109,10 +104,12 @@ namespace AppUIBasics.ControlPages
                 // If the item is invalid, reject it and revert the text. 
                 sender.Text = sender.SelectedValue.ToString();
 
-                var dialog = new ContentDialog();
-                dialog.Content = "The font size must be a number between 8 and 100.";
-                dialog.CloseButtonText = "Close";
-                dialog.DefaultButton = ContentDialogButton.Close;
+                var dialog = new ContentDialog
+                {
+                    Content = "The font size must be a number between 8 and 100.",
+                    CloseButtonText = "Close",
+                    DefaultButton = ContentDialogButton.Close
+                };
                 var task = dialog.ShowAsync();
             }
 

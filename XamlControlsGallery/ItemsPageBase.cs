@@ -1,4 +1,4 @@
-﻿//*********************************************************
+//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -58,12 +58,7 @@ namespace AppUIBasics
 
             _itemId = item.UniqueId;
 
-            if (gridView.ContainerFromItem(item) is GridViewItem)
-            {
-                gridView.PrepareConnectedAnimation("controlAnimation", item, "controlRoot");
-            }
-
-            this.Frame.Navigate(typeof(ItemPage), _itemId);
+            this.Frame.Navigate(typeof(ItemPage), _itemId, new DrillInNavigationTransitionInfo());
         }
 
         protected void OnItemGridViewKeyDown(object sender, KeyRoutedEventArgs e)
@@ -97,19 +92,6 @@ namespace AppUIBasics
                     {
                         ((GridViewItem)gridView.ContainerFromItem(item))?.Focus(FocusState.Programmatic);
                     }
-
-                    ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("controlAnimation");
-
-                    if (animation != null)
-                    {
-                        // Setup the "basic" configuration if the API is present. 
-                        if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7))
-                        {
-                            animation.Configuration = new BasicConnectedAnimationConfiguration();
-                        }
-
-                        await gridView.TryStartConnectedAnimationAsync(animation, item, "controlRoot");
-                    }
                 }
             }
         }
@@ -131,7 +113,7 @@ namespace AppUIBasics
             }
         }
 
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] String propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
             if (Equals(storage, value)) return false;
 

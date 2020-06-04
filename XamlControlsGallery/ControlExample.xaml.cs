@@ -1,4 +1,4 @@
-﻿//*********************************************************
+//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -7,10 +7,12 @@
 // PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
 //*********************************************************
+using AppUIBasics.Helper;
 using ColorCode;
 using ColorCode.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
@@ -145,17 +147,17 @@ namespace AppUIBasics
             set { SetValue(ExampleHeightProperty, value); }
         }
 
-        public static readonly DependencyProperty WebViewHeightProperty = DependencyProperty.Register("WebViewHeight", typeof(Int32), typeof(ControlExample), new PropertyMetadata(400));
-        public Int32 WebViewHeight
+        public static readonly DependencyProperty WebViewHeightProperty = DependencyProperty.Register("WebViewHeight", typeof(int), typeof(ControlExample), new PropertyMetadata(400));
+        public int WebViewHeight
         {
-            get { return (Int32)GetValue(WebViewHeightProperty); }
+            get { return (int)GetValue(WebViewHeightProperty); }
             set { SetValue(WebViewHeightProperty, value); }
         }
 
-        public static readonly DependencyProperty WebViewWidthProperty = DependencyProperty.Register("WebViewWidth", typeof(Int32), typeof(ControlExample), new PropertyMetadata(800));
-        public Int32 WebViewWidth
+        public static readonly DependencyProperty WebViewWidthProperty = DependencyProperty.Register("WebViewWidth", typeof(int), typeof(ControlExample), new PropertyMetadata(800));
+        public int WebViewWidth
         {
-            get { return (Int32)GetValue(WebViewWidthProperty); }
+            get { return (int)GetValue(WebViewWidthProperty); }
             set { SetValue(WebViewWidthProperty, value); }
         }
 
@@ -227,7 +229,7 @@ namespace AppUIBasics
 
         private void GenerateSyntaxHighlightedContent(ContentPresenter presenter, string sampleString, Uri sampleUri, ILanguage highlightLanguage)
         {
-            if (!String.IsNullOrEmpty(sampleString))
+            if (!string.IsNullOrEmpty(sampleString))
             {
                 FormatAndRenderSampleFromString(sampleString, presenter, highlightLanguage);
             }
@@ -254,10 +256,13 @@ namespace AppUIBasics
         }
 
         private static Regex SubstitutionPattern = new Regex(@"\$\(([^\)]+)\)");
-        private void FormatAndRenderSampleFromString(String sampleString, ContentPresenter presenter, ILanguage highlightLanguage)
+        private void FormatAndRenderSampleFromString(string sampleString, ContentPresenter presenter, ILanguage highlightLanguage)
         {
             // Trim out stray blank lines at start and end.
             sampleString = sampleString.TrimStart('\n').TrimEnd();
+
+            // Also trim out spaces at the end of each line
+            sampleString = string.Join('\n', sampleString.Split('\n').Select(s => s.TrimEnd()));
 
             // Perform any applicable substitutions.
             sampleString = SubstitutionPattern.Replace(sampleString, match =>
@@ -272,8 +277,7 @@ namespace AppUIBasics
                 throw new KeyNotFoundException(match.Groups[1].Value);
             });
 
-            var sampleCodeRTB = new RichTextBlock();
-            sampleCodeRTB.FontFamily = new FontFamily("Consolas");
+            var sampleCodeRTB = new RichTextBlock {FontFamily = new FontFamily("Consolas")};
 
             var formatter = GenerateRichTextFormatter();
             formatter.FormatRichTextBlock(sampleString, highlightLanguage, sampleCodeRTB);
@@ -282,9 +286,9 @@ namespace AppUIBasics
 
         private RichTextBlockFormatter GenerateRichTextFormatter()
         {
-            var formatter = new RichTextBlockFormatter(App.ActualTheme);
+            var formatter = new RichTextBlockFormatter(ThemeHelper.ActualTheme);
 
-            if (App.ActualTheme == ElementTheme.Dark)
+            if (ThemeHelper.ActualTheme == ElementTheme.Dark)
             {
                 UpdateFormatterDarkThemeColors(formatter);
             }
