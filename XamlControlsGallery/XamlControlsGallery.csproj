@@ -30,7 +30,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <EnableTypeInfoReflection>false</EnableTypeInfoReflection>
-    <IsWinUIPrerelease>False</IsWinUIPrerelease>
+    <IsWinUIPrerelease>True</IsWinUIPrerelease>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -110,6 +110,7 @@
     </Content>
     <Content Include="Assets\LottieLogo1.png" />
     <Content Include="Assets\NumberBox.png" />
+    <Content Include="Assets\RadioButtons.png" />
     <Content Include="Assets\SampleMedia\cliff.jpg" />
     <Content Include="Assets\SampleMedia\fishes.wmv" />
     <Content Include="Assets\SampleMedia\grapes.jpg" />
@@ -154,7 +155,6 @@
     <Content Include="Assets\NavigationViewItemIcons\NewControlsIcon.png" />
     <Content Include="Assets\NavigationViewItemIcons\ObjectQuickAnimation.png" />
     <Content Include="Assets\NavigationViewItemIcons\PickerIcon.png" />
-    <Content Include="Assets\NavigationViewItemIcons\ProgressIcon.png" />
     <Content Include="Assets\NavigationViewItemIcons\TextIcon.png" />
     <Content Include="Assets\new.png" />
     <Content Include="Assets\ParallaxView.png" />
@@ -315,6 +315,9 @@
     <Compile Include="Common\LanguageList.cs" />
     <Compile Include="Common\MenuItemTemplateSelector.cs" />
     <Compile Include="Common\ImageLoader.cs" />
+    <Compile Include="ControlPages\RadioButtonsPage.xaml.cs">
+      <DependentUpon>RadioButtonsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\NavigationHelper.cs" />
     <Compile Include="Common\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
@@ -509,8 +512,8 @@
     <Compile Include="ControlPages\RadioButtonPage.xaml.cs">
       <DependentUpon>RadioButtonPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ControlPages\RatingsControlPage.xaml.cs">
-      <DependentUpon>RatingsControlPage.xaml</DependentUpon>
+    <Compile Include="ControlPages\RatingControlPage.xaml.cs">
+      <DependentUpon>RatingControlPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlPages\RelativePanelPage.xaml.cs">
       <DependentUpon>RelativePanelPage.xaml</DependentUpon>
@@ -551,8 +554,8 @@
     <Compile Include="ControlPages\StackPanelPage.xaml.cs">
       <DependentUpon>StackPanelPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ControlPages\SwipePage.xaml.cs">
-      <DependentUpon>SwipePage.xaml</DependentUpon>
+    <Compile Include="ControlPages\SwipeControlPage.xaml.cs">
+      <DependentUpon>SwipeControlPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlPages\TextBlockPage.xaml.cs">
       <DependentUpon>TextBlockPage.xaml</DependentUpon>
@@ -783,6 +786,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ControlPages\RadioButtonsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ControlPages\TabViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -991,7 +998,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ControlPages\RatingsControlPage.xaml">
+    <Page Include="ControlPages\RatingControlPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1043,7 +1050,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ControlPages\SwipePage.xaml">
+    <Page Include="ControlPages\SwipeControlPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1196,7 +1203,7 @@
       <Version>6.1.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.4.0</Version>
+      <Version>2.5.0-prerelease.200923002</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.0</Version>
@@ -1210,7 +1217,11 @@
     <None Include="testcert.pfx" />
     <None Include="XamlControlsGallery_TemporaryKey.pfx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="WindowsDesktop, Version=10.0.18362.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
